@@ -3,19 +3,37 @@ This Program is to findout Firday The 13th
 '''
 import calendar
 import sys
-from colorama import Fore
+from colorama import Fore, Style
 #### Veriable Declaration Start
 myCalendar = calendar.TextCalendar(calendar.SUNDAY)
 myCalendarObj = calendar.Calendar(firstweekday=6)
+found = False
 weekdays = ('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')
 #### Veriable Declaration End
-# for I in myCalendarObj.itermonthdates(2020,5):
-#
-#     print(type(I), I.day, I.year, I.today(),I.isoweekday(), type(I.weekday()))
-# print(myCalendar.formatmonth(2020, 5))
-# sys.exit()
+def month_has_13(monthDatesObj):
+    found = False
+    for i_date in monthDatesObj:
+        if i_date.day == 13 and i_date.weekday() == 4:
+            found = True
+            break
+    return found
 
-# print(myCalendar.formatmonth(1999, 5)) #### PRINTING CALENDAR MAY-1999
+
+def printMonth(monthInText,found = False):
+
+    if found == True:
+        length = len(monthInText);
+        ctr = 0
+        while ctr < length:
+            if monthInText[ctr] == '1' and monthInText[ctr + 1] == '3':
+                print(f"{Fore.LIGHTRED_EX}{Style.BRIGHT}13{Style.RESET_ALL}{Fore.RESET}", end='')
+                ctr += 2
+                continue
+            print(monthInText[ctr], end='')
+            ctr += 1
+
+    if found == False:
+        print(monthInText)
 menu_message = """
   Please Enter Your Choice.
   ----------------------------
@@ -32,28 +50,24 @@ if choice == 1:
     year = int(input("Enter Year : "))
     month = int(input("Enter Month : "))
     monthdatesObj = myCalendarObj.itermonthdates(year, month)
-    found = False
-    for i_date in monthdatesObj:
-        if i_date.month != month:
-            continue
-        if i_date.day == 13 and i_date.weekday() == 4:
-            print("Yes!!!!! You got the Friday The 13th .....")
-            output = myCalendar.formatmonth(theyear=year, themonth=month)
-            length = len(output); ctr = 0
-            while ctr < length:
-                if output[ctr] == '1' and output[ctr+1] == '3':
-                    print(f"{Fore.LIGHTRED_EX}13{Fore.RESET}",end='')
-                    ctr += 2
-                    continue
-                print(output[ctr], end='')
-                ctr += 1
-            found = True
-            break
-    if found == False:
+    found = month_has_13(monthdatesObj)
+    monthInText = myCalendar.formatmonth(theyear=year, themonth=month)
+    if found == True:
+        print("Yes, You  Find It!!!!!!!!!! ............ lucky!!!!!!")
+        printMonth(monthInText, found)
+    elif found == False:
         print("Given Month isn't so Unlucky!!!!!!")
+        printMonth(monthInText, found)
+
 elif choice == 2:
     year = int(input("Enter Year : "))
-    print(myCalendar.formatyear(year))
+    found = False
+    for month in range(1,13):
+        monthdatesObj = myCalendarObj.itermonthdates(year, month)
+        found = month_has_13(monthdatesObj)
+        if found == True:
+            monthInText = myCalendar.formatmonth(theyear=year, themonth=month)
+            printMonth(monthInText, found)
 elif choice == 3:
     date = input("Enter your Date as ( dd-mm-yyyy ) : ")
     print(date)
