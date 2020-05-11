@@ -70,6 +70,23 @@ elif choice == 2:
             printMonth(monthInText, found)
 elif choice == 3:
     date = input("Enter your Date as ( dd-mm-yyyy ) : ")
-    print(date)
+    dateList = str(date).split('-')
+    try:
+        day = int(dateList[0])
+        month = int(dateList[1])
+        year = int(dateList[2])
+    except ValueError:
+        print("Wrong Date Input !!!!!!! Try Again as dd-mm-yyyy ..... ")
+    if day == 13:
+        monthDatesObj = myCalendarObj.itermonthdates(year, month)
+        found = month_has_13(monthDatesObj)
+        if found == True :
+            print("Yes, Ur date is Friday the 13th")
+            monthInText = myCalendar.formatmonth(theyear=year, themonth=month)
+            printMonth(monthInText, found)
+        else:
+            print("Nop, It's not Friday the 13th .....")
+    else:
+        print("Are looking for any Friday the 13th, then give us some date of 13th ..... Bye...")
 else:
     print(f"{Fore.LIGHTRED_EX}WRONG Input!!!!!!{Fore.RESET}\nPlease Enter the choice in INTEGER-(1/2/3) .... Rerun the program .... Bye Bye")
